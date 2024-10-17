@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Wishlist</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <h1>Your Wishlist</h1>
+    <div id="wishlistContainer"></div>
+  <a href="index.html"><i class="fa fa-home"></i></a>  
+
+    <script>
+        // Function to update wishlist UI
+        function updateWishlistUI() {
+            const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            const wishlistContainer = document.getElementById('wishlistContainer');
+            wishlistContainer.innerHTML = '';
+
+            if (wishlist.length === 0) {
+                wishlistContainer.innerHTML = '<p>Your wishlist is empty</p>';
+            } else {
+                wishlist.forEach(product => {
+                    const productElement = document.createElement('div');
+                    productElement.classList.add('wishlist-item');
+                    productElement.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}" />
+                        <h3>${product.name}</h3>
+                        <p>${product.price}</p>
+                        <button onclick="removeFromWishlist('${product.id}')">Remove</button>
+                    `;
+                    wishlistContainer.appendChild(productElement);
+                });
+            }
+        }
+
+        // Function to remove product from wishlist
+        function removeFromWishlist(productId) {
+            let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+            wishlist = wishlist.filter(item => item.id !== productId);
+            localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            updateWishlistUI();
+        }
+
+        // Initialize wishlist UI when the page loads
+        window.addEventListener('load', updateWishlistUI);
+    </script>
+</body>
+</html>
